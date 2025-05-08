@@ -12,9 +12,9 @@ A choreography-inspired domain-specific language (DSL) for control-flow programm
 - **Control flow** via labels and unconditional jumps  
 - **Conditional logic** with `SPIN … THEN MOVE TO …`  
 - **Loops**: `REPEAT n TIMES:` and `WHILE …:`  
-- **Functions**: define with `DANCE …:`, call with `CALL`, and return with `RETURN`  
 - **Input/Output**: print strings or variables with `ECHO`  
-- **Modular, flowchart-style thinking** :contentReference[oaicite:2]{index=2}:contentReference[oaicite:3]{index=3}.
+- **Modular, flowchart-style thinking**
+- **Initializing Arrays**
 
 ## Example Program
 
@@ -104,7 +104,7 @@ make run input=your_script.choreo
 ## MVP
 As written in the proposal, we implemented **basic if-else, loops, assignment and binary operations.**
 
-Additional work includes **initializing arrays, adding function support, support for nested conditionals and nested loops!**
+Additional work includes **initializing arrays, support for nested conditionals and nested loops!**
 
 # Contributors:
 - Ramisha Kamal Pasha -- Lead
