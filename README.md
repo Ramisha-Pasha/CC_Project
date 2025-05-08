@@ -19,32 +19,59 @@ A choreography-inspired domain-specific language (DSL) for control-flow programm
 ## Example Program
 
 ```choreo
-ENTER x = 5
-ENTER y = 10
+ENTER x = 2
+ENTER y = 3
+ENTER s=9
 
-SPIN x < y THEN MOVE TO act1
-ECHO "No spin needed"
-MOVE TO finale
 
-act1:
-    ECHO "Twirl begins"
-    x = x + y
-    CALL add_more
-    MOVE TO finale
+ECCO "Initial values: "
+ECCO_D x
+ECCO_D y
 
-DANCE add_more:
-    ECHO "Adding more twirls"
-    REPEAT 3 TIMES:
-        ECHO x
-        x = x + 1
-    RETURN
 
-finale:
-    WHILE x > 0:
-        ECHO x
-        x = x - 5
-    ECHO "Final pose"
-    EXIT
+x = x + y * 2
+ECCO "After x = x + y * 2: "
+ECCO_D x
+
+
+SPIN x > 10 THEN MOVE TO high
+ SPIN s > 4 THEN MOVE TO loop
+ECCO "x is not greater than 10"
+ECCO "s is not greater than 4 "
+MOVE TO after_spin
+
+high:
+  ECCO "x exceeded 10!"
+
+
+
+loop:
+    ECCO "s exceeded 4 "
+    ENTER i=0
+    REPEAT 4 TIMES
+        REPEAT 3 TIMES
+          i = i+1
+          ECCO "hello g, i am inside nested loop with iteration "
+          ECCO_D i
+          ENDREPEAT
+
+    ECCO "Loop iteration: "
+    ECCO_D x
+    x = x + 1
+    ENDREPEAT
+
+after_spin:
+ECCO "Final x: "
+ECCO_D x
+
+ENSEMBLE arr[5]
+ENTER i = 0
+REPEAT 5 TIMES
+    arr[i] = 10 + 2 * i
+    ECCO_D arr[i]
+    i = i + 1
+ENDREPEAT
+EXIT
 ```
 
 
