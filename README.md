@@ -11,7 +11,8 @@ A choreography-inspired domain-specific language (DSL) for control-flow programm
 - **Human-readable, theatrical syntax**  
 - **Control flow** via labels and unconditional jumps  
 - **Conditional logic** with `SPIN … THEN MOVE TO …`  
-- **Loops**: `REPEAT n TIMES:` and `WHILE …:`  
+- **Loops**: `REPEAT n TIMES:`
+- **Array Declaration**: `ENSEMBLE arrayName[size]\`   
 - **Input/Output**: print strings or variables with `ECHO`  
 - **Modular, flowchart-style thinking**
 - **Initializing Arrays**
