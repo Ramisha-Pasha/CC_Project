@@ -15,9 +15,9 @@ using namespace llvm;
 // Base AST node
 struct ASTNode {
   virtual ~ASTNode() = default;
-  virtual llvm::Value* codegen(llvm::LLVMContext &ctx,
-                               llvm::IRBuilder<> &builder,
-                               llvm::Module *module) = 0;
+  virtual llvm::Value* codegen(llvm::LLVMContext &ChoreoContext,
+                               llvm::IRBuilder<> &ChoreoBuilder,
+                               llvm::Module *ChoreoModule) = 0;
   virtual void print(int indent = 0) const = 0;
 };
 
@@ -26,9 +26,9 @@ class NumberExpr : public ASTNode {
 public:
   double Val;
   NumberExpr(double val) : Val(val) {}
-  llvm::Value* codegen(llvm::LLVMContext &ctx,
-                       llvm::IRBuilder<> &builder,
-                       llvm::Module *module) override;
+  llvm::Value* codegen(llvm::LLVMContext &ChoreoContext,
+                       llvm::IRBuilder<> &ChoreoBuilder,
+                       llvm::Module *ChoreoModule) override;
   void print(int indent = 0) const override {
     std::cout << std::string(indent, ' ')
               << "NumberExpr: " << Val << "\n";
@@ -38,11 +38,11 @@ class IntegerExpr : public ASTNode {
   int64_t Val;
 public:
   explicit IntegerExpr(int64_t V) : Val(V) {}
-  llvm::Value* codegen(llvm::LLVMContext &ctx,
-                       llvm::IRBuilder<> &builder,
-                       llvm::Module *module) override {
+  llvm::Value* codegen(llvm::LLVMContext &ChoreoContext,
+                       llvm::IRBuilder<> &ChoreoBuilder,
+                       llvm::Module *ChoreoModule) override {
     // create a 64-bit integer constant
-    return llvm::ConstantInt::get(llvm::Type::getInt64Ty(ctx), Val, true);
+    return llvm::ConstantInt::get(llvm::Type::getInt64Ty(ChoreoContext), Val, true);
   }
   void print(int indent = 0) const override {
     std::cout << std::string(indent,' ')
@@ -54,9 +54,9 @@ class VariableExpr : public ASTNode {
 public:
   std::string Name;
   VariableExpr(const std::string &name) : Name(name) {}
-  llvm::Value* codegen(llvm::LLVMContext &ctx,
-                       llvm::IRBuilder<> &builder,
-                       llvm::Module *module) override;
+  llvm::Value* codegen(llvm::LLVMContext &ChoreoContext,
+                       llvm::IRBuilder<> &ChoreoBuilder,
+                       llvm::Module *ChoreoModule) override;
   void print(int indent = 0) const override {
     std::cout << std::string(indent, ' ')
               << "VariableExpr: " << Name << "\n";
@@ -70,9 +70,9 @@ public:
   ASTNode *Init;
   VarDecl(const std::string &name, ASTNode *init)
     : Name(name), Init(init) {}
-  llvm::Value* codegen(llvm::LLVMContext &ctx,
-                       llvm::IRBuilder<> &builder,
-                       llvm::Module *module) override;
+  llvm::Value* codegen(llvm::LLVMContext &ChoreoContext,
+                       llvm::IRBuilder<> &ChoreoBuilder,
+                       llvm::Module *ChoreoModule) override;
   void print(int indent = 0) const override {
     std::cout << std::string(indent, ' ')
               << "VarDecl: " << Name << "\n";
@@ -85,9 +85,9 @@ class EchoStr : public ASTNode {
 public:
   std::string Str;
   EchoStr(const std::string &s) : Str(s) {}
-  llvm::Value* codegen(llvm::LLVMContext &ctx,
-                       llvm::IRBuilder<> &builder,
-                       llvm::Module *module) override;
+  llvm::Value* codegen(llvm::LLVMContext &ChoreoContext,
+                       llvm::IRBuilder<> &ChoreoBuilder,
+                       llvm::Module *ChoreoModule) override;
   void print(int indent = 0) const override {
     std::cout << std::string(indent, ' ')
               << "EchoStr: \"" << Str << "\"\n";
@@ -99,9 +99,9 @@ class EchoVar : public ASTNode {
 public:
   std::string Name;
   EchoVar(const std::string &n) : Name(n) {}
-  llvm::Value* codegen(llvm::LLVMContext &ctx,
-                       llvm::IRBuilder<> &builder,
-                       llvm::Module *module) override;
+  llvm::Value* codegen(llvm::LLVMContext &ChoreoContext,
+                       llvm::IRBuilder<> &ChoreoBuilder,
+                       llvm::Module *ChoreoModule) override;
   void print(int indent = 0) const override {
     std::cout << std::string(indent, ' ')
               << "EchoVar: " << Name << "\n";
@@ -113,9 +113,9 @@ class Label : public ASTNode {
   public:
     std::string Name;
     Label(const std::string &n) : Name(n) {}
-    llvm::Value* codegen(llvm::LLVMContext &ctx,
-                         llvm::IRBuilder<> &builder,
-                         llvm::Module *module) override;
+    llvm::Value* codegen(llvm::LLVMContext &ChoreoContext,
+                         llvm::IRBuilder<> &ChoreoBuilder,
+                         llvm::Module *ChoreoModule) override;
     void print(int indent = 0) const override {
       std::cout<<std::string(indent,' ')<<"Label: "<<Name<<"\n";
     }
@@ -126,9 +126,9 @@ class Label : public ASTNode {
   public:
     std::string Target;
     Jump(const std::string &t) : Target(t) {}
-    llvm::Value* codegen(llvm::LLVMContext &ctx,
-                         llvm::IRBuilder<> &builder,
-                         llvm::Module *module) override;
+    llvm::Value* codegen(llvm::LLVMContext &ChoreoContext,
+                         llvm::IRBuilder<> &ChoreoBuilder,
+                         llvm::Module *ChoreoModule) override;
     void print(int indent = 0) const override {
       std::cout<<std::string(indent,' ')<<"Jump to: "<<Target<<"\n";
     }
@@ -141,9 +141,9 @@ class BinaryExpr : public ASTNode {
 public:
   BinaryExpr(char op, ASTNode *l, ASTNode *r)
     : Op(op), Left(l), Right(r) {}
-  llvm::Value* codegen(llvm::LLVMContext &ctx,
-                       llvm::IRBuilder<> &builder,
-                       llvm::Module *module) override;
+  llvm::Value* codegen(llvm::LLVMContext &ChoreoContext,
+                       llvm::IRBuilder<> &ChoreoBuilder,
+                       llvm::Module *ChoreoModule) override;
   void print(int indent=0) const override {
     std::cout<<std::string(indent,' ')<<"BinaryExpr: "<<Op<<"\n";
     Left->print(indent+2);
@@ -158,9 +158,9 @@ class Assign : public ASTNode {
 public:
   Assign(const std::string &lhs, ASTNode *rhs)
     : LHS(lhs), RHS(rhs) {}
-  llvm::Value* codegen(llvm::LLVMContext &ctx,
-                       llvm::IRBuilder<> &builder,
-                       llvm::Module *module) override;
+  llvm::Value* codegen(llvm::LLVMContext &ChoreoContext,
+                       llvm::IRBuilder<> &ChoreoBuilder,
+                       llvm::Module *ChoreoModule) override;
   void print(int indent=0) const override {
     std::cout<<std::string(indent,' ')<<"Assign: "<<LHS<<"\n";
     RHS->print(indent+2);
@@ -174,9 +174,9 @@ class ComparisonExpr : public ASTNode {
 public:
   ComparisonExpr(const std::string &op, ASTNode *l, ASTNode *r)
     : Op(op), Left(l), Right(r) {}
-  llvm::Value* codegen(llvm::LLVMContext &ctx,
-                       llvm::IRBuilder<> &builder,
-                       llvm::Module *module) override;
+  llvm::Value* codegen(llvm::LLVMContext &ChoreoContext,
+                       llvm::IRBuilder<> &ChoreoBuilder,
+                       llvm::Module *ChoreoModule) override;
   void print(int indent=0) const override {
     std::cout<<std::string(indent,' ')
              <<"ComparisonExpr: "<<Op<<"\n";
@@ -192,25 +192,25 @@ class IfStmt : public ASTNode {
 public:
   IfStmt(ASTNode *c, const std::string &lbl)
     : Cond(c), Label(lbl) {}
-  llvm::Value* codegen(llvm::LLVMContext &ctx,
-                       llvm::IRBuilder<> &builder,
-                       llvm::Module *module) override;
+  llvm::Value* codegen(llvm::LLVMContext &ChoreoContext,
+                       llvm::IRBuilder<> &ChoreoBuilder,
+                       llvm::Module *ChoreoModule) override;
   void print(int indent=0) const override {
     std::cout<<std::string(indent,' ')
              <<"IfStmt: jump to "<<Label<<" if\n";
     Cond->print(indent+2);
   }
 };
-/// Repeat a block of statements Count times
+//Repeat a block of statements Count times
 class Repeat : public ASTNode {
   public:
     double  Count;
     std::vector<ASTNode*> Body;
     Repeat(int  c, std::vector<ASTNode*> *body)
       : Count(c), Body(std::move(*body)) {}
-    llvm::Value* codegen(llvm::LLVMContext &ctx,
-                         llvm::IRBuilder<> &builder,
-                         llvm::Module *module) override;
+    llvm::Value* codegen(llvm::LLVMContext &ChoreoContext,
+                         llvm::IRBuilder<> &ChoreoBuilder,
+                         llvm::Module *ChoreoModule) override;
     void print(int indent=0) const override {
       std::cout<<std::string(indent,' ')
                <<"Repeat "<<Count<<" times\n";
@@ -226,8 +226,8 @@ class Repeat : public ASTNode {
   public:
     ArrayDecl(const std::string &n, size_t c)
       : Name(n), Count(c) {}
-    llvm::Value* codegen(LLVMContext &ctx,
-                         IRBuilder<> &builder,
+    llvm::Value* codegen(LLVMContext &ChoreoContext,
+                         IRBuilder<> &ChoreoBuilder,
                          Module *M) override;
     void print(int indent=0) const override {
       std::cout<<std::string(indent,' ')
@@ -242,8 +242,8 @@ class Repeat : public ASTNode {
   public:
     IndexExpr(const std::string &n, ASTNode *i)
       : Name(n), Idx(i) {}
-    llvm::Value* codegen(LLVMContext &ctx,
-                         IRBuilder<> &builder,
+    llvm::Value* codegen(LLVMContext &ChoreoContext,
+                         IRBuilder<> &ChoreoBuilder,
                          Module *M) override;
     void print(int indent=0) const override {
       std::cout<<std::string(indent,' ')
@@ -259,8 +259,8 @@ class Repeat : public ASTNode {
   public:
     StoreToIndex(const std::string &n, ASTNode *i, ASTNode *r)
       : Name(n), Idx(i), RHS(r) {}
-    llvm::Value* codegen(LLVMContext &ctx,
-                         IRBuilder<> &builder,
+    llvm::Value* codegen(LLVMContext &ChoreoContext,
+                         IRBuilder<> &ChoreoBuilder,
                          Module *M) override;
     void print(int indent=0) const override {
       std::cout<<std::string(indent,' ')
@@ -277,8 +277,8 @@ class Repeat : public ASTNode {
   public:
     EchoIndexedVar(const std::string &n, ASTNode *idx)
       : Name(n), Idx(idx) {}
-    llvm::Value* codegen(llvm::LLVMContext &ctx,
-                         llvm::IRBuilder<> &builder,
+    llvm::Value* codegen(llvm::LLVMContext &ChoreoContext,
+                         llvm::IRBuilder<> &ChoreoBuilder,
                          llvm::Module *M) override;
     void print(int indent=0) const override {
       std::cout<<std::string(indent,' ')

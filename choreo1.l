@@ -34,7 +34,10 @@
 
 [0-9]+(\.[0-9]+)?      { yylval.double_literal = atof(yytext); return tok_double_literal; }
 
-\"[^"]*\"              { yylval.string_literal = strdup(yytext+1); yytext[yyleng-1]=0; return tok_string_literal; }
+\"[^\"]*\"              { char *s = strdup(yytext + 1);        // s = hello"
+                          s[yyleng - 2] = '\0';                // overwrite that trailing '"'
+                          yylval.string_literal = s;           
+                          return tok_string_literal;}
 [a-zA-Z_][a-zA-Z0-9_]*:  {
     yytext[yyleng-1] = '\0';             // drop the trailing colon
     yylval.identifier = strdup(yytext);
