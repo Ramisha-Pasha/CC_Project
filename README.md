@@ -87,6 +87,7 @@ EXIT
 | `label:`                        | Define a jump label                       |
 | `REPEAT n TIMES:`               | Repeat the enclosed block _n_ times       |
 | `WHILE x > 0:`                  | Repeat block while the condition holds    |
+| `ENSEMBLE arr[5]`               | Declare an array of size 5                |
 | `EXIT`                          | End the program                           | :contentReference[oaicite:6]{index=6}:contentReference[oaicite:7]{index=7}
 
 ## Installation
