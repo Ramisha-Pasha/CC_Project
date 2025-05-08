@@ -86,7 +86,7 @@ EXIT
 | `ECHO x`                        | Print the value of a variable             |
 | `label:`                        | Define a jump label                       |
 | `REPEAT n TIMES:`               | Repeat the enclosed block _n_ times       |
-| `ENSEMBLE arr[size]`            | Declares an array of size                 |
+| `WHILE x > 0:`                  | Repeat block while the condition holds    |
 | `EXIT`                          | End the program                           | :contentReference[oaicite:6]{index=6}:contentReference[oaicite:7]{index=7}
 
 ## Installation
